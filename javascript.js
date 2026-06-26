@@ -11,9 +11,9 @@
 const gameBoard = (() => {
 
     const board = {
-        x0 : ['_', '_', '_'],
-        x1 : ['_', '_', '_'],
-        x2 : ['_', '_', '_'],
+        y1 : ['_', '_', '_'],
+        y2 : ['_', '_', '_'],
+        y3 : ['_', '_', '_'],
     }
 
     const displayGameBoard = () => {
@@ -24,7 +24,13 @@ const gameBoard = (() => {
             return myBoard;
     };
 
-    return { displayGameBoard };
+    const placeX = () => {
+        Object.values(board)[0][0] = 'X';
+        return displayGameBoard();
+    };
+        
+    return { displayGameBoard, placeX };
 })();
 
 console.log(gameBoard.displayGameBoard());
+console.log(gameBoard.placeX());
