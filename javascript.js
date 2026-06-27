@@ -35,7 +35,7 @@ const gameBoard = (() => {
         function threeXInARow(value) {
             return value === 'X'
         }
-        if (board.y1.every(threeXInARow) || board.y2.every(threeXInARow) || board.y2.every(threeXInARow)) {
+        if (board.y1.every(threeXInARow) || board.y2.every(threeXInARow) || board.y3.every(threeXInARow)) {
             return true;
         }
     }
@@ -44,7 +44,7 @@ const gameBoard = (() => {
         function threeOInARow(value) {
             return value === 'O'
         }
-        if (board.y1.every(threeOInARow) || board.y2.every(threeOInARow) || board.y2.every(threeOInARow)) {
+        if (board.y1.every(threeOInARow) || board.y2.every(threeOInARow) || board.y3.every(threeOInARow)) {
             return true;
         }
     }    
@@ -67,9 +67,25 @@ const gameBoard = (() => {
             return true;
         } 
     }
+
+    const tie = () => {
+        let tieCount = 0;
+        for(let i = 0; i < Object.values(board).length; i++){
+            for(let j = 0; j < Object.values(board)[i].length; j++){
+
+            if(Object.values(board)[i][j] === '_') {
+                tieCount++;
+                };
+            }
+        }
+        if(tieCount === 0) {
+            return true;
+        };
+    }
     
-    return { displayGameBoard, boardCheck, placeX, placeO, winThreeInARowX, winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow };
+    return { displayGameBoard, boardCheck, placeX, placeO, winThreeInARowX, winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow, tie };
 })();
+
 
 const ticTacToe = (() => {
     let turn = 'home';
@@ -103,8 +119,17 @@ const ticTacToe = (() => {
             
             if (gameBoard.winVerticalThreeInARow() || gameBoard.winDiagonalThreeInARow() || gameBoard.winThreeInARowX() || gameBoard.winThreeInARowO()) {
                 console.log(`Game Over! ${turn.toUpperCase()} win!`);
+                console.log(gameBoard.displayGameBoard());
+
                 win++;
+                break
             };
+
+            if(gameBoard.tie()) {
+                console.log(`Draw!`);
+                console.log(gameBoard.displayGameBoard());
+                break;
+            }
 
             
             console.log(gameBoard.displayGameBoard());
