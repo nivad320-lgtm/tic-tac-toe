@@ -14,6 +14,12 @@ const gameBoard = (() => {
             return myBoard;
     };
 
+    const boardCheck = (x,y) => {
+        if (Object.values(board)[y-1][x-1] === '_') {
+            return true;
+        } else {return false;}
+    }
+
     const placeX = (x,y) => {
         Object.values(board)[y-1][x-1] = 'X';
         return displayGameBoard();
@@ -64,7 +70,7 @@ const gameBoard = (() => {
         }
     }
     
-    return { displayGameBoard, placeX, placeO, winThreeInARowX, winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow };
+    return { displayGameBoard, boardCheck, placeX, placeO, winThreeInARowX, winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow };
 })();
 
 const ticTacToe = (() => {
@@ -81,9 +87,16 @@ const ticTacToe = (() => {
                 console.log(`Away Team's Turn!`);
             }
             
+            
             let inputX = prompt("X");
             let inputY = prompt("Y");
             
+            while (!gameBoard.boardCheck(inputX,inputY)) {
+                console.log("Same Place!")
+                inputX = prompt("X");
+                inputY = prompt("Y");
+            }
+                        
             if (turn === 'home') {
                 gameBoard.placeX(inputX, inputY);
             } else if (turn === 'away') {
