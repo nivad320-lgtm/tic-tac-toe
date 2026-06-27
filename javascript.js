@@ -1,9 +1,9 @@
 const gameBoard = (() => {
 
     const board = {
-        y1 : ['_', 'X', 'X'],
-        y2 : ['_', '_', 'X'],
-        y3 : ['X', '_', 'X'],
+        y1 : ['X', 'X', '_'],
+        y2 : ['_', 'X', 'X'],
+        y3 : ['X', 'X', 'X'],
     }
 
     const threeXInARow = (currentValue) => currentValue === 'X';
@@ -44,10 +44,17 @@ const gameBoard = (() => {
             }
         }
     }
+
+    const winDiagonalThreeInARow = () => {
+        if ((board.y2[1] === board.y1[0] && board.y2[1] === board.y3[2]) || (board.y2[1] === board.y1[2] && board.y2[1] === board.y3[0])){
+            console.log('win');
+        }
+    }
     
-    return { displayGameBoard, placeX, placeO, winThreeInARowX, winVerticalThreeInARow };
+    return { displayGameBoard, placeX, placeO, winThreeInARowX, winVerticalThreeInARow, winDiagonalThreeInARow };
 })();
 
 // console.log(gameBoard.placeX(2,1));
 // console.log(gameBoard.winThreeInARowX())
-console.log(gameBoard.winVerticalThreeInARow())
+// console.log(gameBoard.winVerticalThreeInARow())
+console.log(gameBoard.winDiagonalThreeInARow())
