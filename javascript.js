@@ -5,8 +5,6 @@ const gameBoard = (() => {
         y2 : ['_', '_', '_'],
         y3 : ['_', '_', '_'],
     }
-
-    const threeXInARow = (currentValue) => currentValue === 'X';
     
     const displayGameBoard = () => {
             let myBoard = '';
@@ -28,37 +26,50 @@ const gameBoard = (() => {
         
     // bug where it returns undefined
     const winThreeInARowX = () => {
-        Object.values(board).forEach((value) => {
-            if (value.every(threeXInARow)) {
-                console.log(value);    
-            }
-        });
+        function threeXInARow(value) {
+            return value === 'X'
+        }
+        if (board.y1.every(threeXInARow) || board.y2.every(threeXInARow) || board.y2.every(threeXInARow)) {
+            return true;
+        }
     }
+
+    const winThreeInARowO = () => {
+        function threeOInARow(value) {
+            return value === 'O'
+        }
+        if (board.y1.every(threeOInARow) || board.y2.every(threeOInARow) || board.y2.every(threeOInARow)) {
+            return true;
+        }
+    }    
 
     const winVerticalThreeInARow = () => {
         for (let i = 0; i < board.y1.length; i++) {
-            if (board.y1[i] === board.y2[i] && board.y2[i] === board.y3[i]) {
-                console.log('win');
+            if ((board.y1[i]==='X' && board.y2[i] === 'X' && board.y3[i] === 'X') ||
+             (board.y1[i]==='O' && board.y2[i] === 'O' && board.y3[i] === 'O')
+            ) {
+                return true;
             } else {
-                console.log('no')
+                return false;
             }
         }
     }
 
     const winDiagonalThreeInARow = () => {
-        if ((board.y2[1] === board.y1[0] && board.y2[1] === board.y3[2]) ||
-         (board.y2[1] === board.y1[2] && board.y2[1] === board.y3[0])) {
-            console.log('win');
+        if ((board.y2[1] === 'X' && board.y1[0] === 'X' && board.y3[2] === 'X') ||
+         (board.y2[1] === 'O' && board.y1[0] === 'O' && board.y3[2] === 'O')) {
+            return true;
+        } else {
+            return false;
         }
     }
     
-    return { displayGameBoard, placeX, placeO, winThreeInARowX, winVerticalThreeInARow, winDiagonalThreeInARow };
+    return { displayGameBoard, placeX, placeO, winThreeInARowX, winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow };
 })();
 
 const ticTacToe = (() => {
     let turn = 'home';
-    const win = 0;
-
+    let win = 0
     const playGame = () => {
         
         console.log(gameBoard.displayGameBoard())
@@ -79,7 +90,12 @@ const ticTacToe = (() => {
                 gameBoard.placeO(inputX, inputY)
             }
 
-            console.log(gameBoard.displayGameBoard())
+            if (gameBoard.winVerticalThreeInARow() || gameBoard.winDiagonalThreeInARow() || gameBoard.winThreeInARowX() || gameBoard.winThreeInARowO()) {
+                console.log(`Game Over! ${turn.toUpperCase()} win!`);
+                win++;
+            };
+            
+            console.log(gameBoard.displayGameBoard());
             if (turn === 'home') {
                 turn = 'away'
             } else if (turn === 'away') {
@@ -90,10 +106,5 @@ const ticTacToe = (() => {
 
     return { playGame }
 })();
-
-// console.log(gameBoard.placeX('2','1'));
-// console.log(gameBoard.winThreeInARowX())
-// console.log(gameBoard.winVerticalThreeInARow())
-// console.log(gameBoard.winDiagonalThreeInARow())
 
 console.log(ticTacToe.playGame())
