@@ -61,7 +61,9 @@ const gameBoard = (() => {
 
     const winDiagonalThreeInARow = () => {
         if ((board.y2[1] === 'X' && board.y1[0] === 'X' && board.y3[2] === 'X') ||
-         (board.y2[1] === 'O' && board.y1[0] === 'O' && board.y3[2] === 'O')) {
+            (board.y2[1] === 'X' && board.y1[2] === 'X' && board.y3[0] === 'X') ||
+            (board.y2[1] === 'O' && board.y1[2] === 'O' && board.y3[0] === 'O') ||
+            (board.y2[1] === 'O' && board.y1[0] === 'O' && board.y3[2] === 'O')) {
             return true;
         } 
     }
