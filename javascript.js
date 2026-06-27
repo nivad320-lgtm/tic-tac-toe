@@ -1,9 +1,9 @@
 const gameBoard = (() => {
 
     const board = {
-        y1 : ['X', 'X', '_'],
-        y2 : ['_', 'X', 'X'],
-        y3 : ['X', 'X', 'X'],
+        y1 : ['_', '_', '_'],
+        y2 : ['_', '_', '_'],
+        y3 : ['_', '_', '_'],
     }
 
     const threeXInARow = (currentValue) => currentValue === 'X';
@@ -46,7 +46,8 @@ const gameBoard = (() => {
     }
 
     const winDiagonalThreeInARow = () => {
-        if ((board.y2[1] === board.y1[0] && board.y2[1] === board.y3[2]) || (board.y2[1] === board.y1[2] && board.y2[1] === board.y3[0])){
+        if ((board.y2[1] === board.y1[0] && board.y2[1] === board.y3[2]) ||
+         (board.y2[1] === board.y1[2] && board.y2[1] === board.y3[0])) {
             console.log('win');
         }
     }
@@ -54,7 +55,45 @@ const gameBoard = (() => {
     return { displayGameBoard, placeX, placeO, winThreeInARowX, winVerticalThreeInARow, winDiagonalThreeInARow };
 })();
 
-// console.log(gameBoard.placeX(2,1));
+const ticTacToe = (() => {
+    let turn = 'home';
+    const win = 0;
+
+    const playGame = () => {
+        
+        console.log(gameBoard.displayGameBoard())
+        
+        while (!win) {
+            if (turn === 'home') {
+                console.log(`Home Team's Turn!`);
+            } else if (turn === 'away') {
+                console.log(`Away Team's Turn!`);
+            }
+            
+            let inputX = prompt("X");
+            let inputY = prompt("Y");
+            
+            if (turn === 'home') {
+                gameBoard.placeX(inputX, inputY);
+            } else if (turn === 'away') {
+                gameBoard.placeO(inputX, inputY)
+            }
+
+            console.log(gameBoard.displayGameBoard())
+            if (turn === 'home') {
+                turn = 'away'
+            } else if (turn === 'away') {
+                turn = 'home'
+            }
+        }
+    }
+
+    return { playGame }
+})();
+
+// console.log(gameBoard.placeX('2','1'));
 // console.log(gameBoard.winThreeInARowX())
 // console.log(gameBoard.winVerticalThreeInARow())
-console.log(gameBoard.winDiagonalThreeInARow())
+// console.log(gameBoard.winDiagonalThreeInARow())
+
+console.log(ticTacToe.playGame())
