@@ -1,21 +1,13 @@
-// const gameBoard = {
-//     x0: ['_', '_', '_'],
-//     x1: ['_', '_', '_'],
-//     x2: ['_', '_', '_'],
-// }
-
-// for (const boardLine in gameBoard) {
-//     console.log(gameBoard[boardLine]);
-// }
-
 const gameBoard = (() => {
 
     const board = {
-        y1 : ['_', '_', '_'],
-        y2 : ['_', '_', '_'],
-        y3 : ['_', '_', '_'],
+        y1 : ['_', 'X', 'X'],
+        y2 : ['_', '_', 'X'],
+        y3 : ['X', '_', 'X'],
     }
 
+    const threeXInARow = (currentValue) => currentValue === 'X';
+    
     const displayGameBoard = () => {
             let myBoard = '';
             for (boardLine in board) {
@@ -24,13 +16,38 @@ const gameBoard = (() => {
             return myBoard;
     };
 
-    const placeX = () => {
-        Object.values(board)[0][0] = 'X';
+    const placeX = (x,y) => {
+        Object.values(board)[y-1][x-1] = 'X';
+        return displayGameBoard();
+    };
+
+    const placeO = (x,y) => {
+        Object.values(board)[y-1][x-1] = 'O';
         return displayGameBoard();
     };
         
-    return { displayGameBoard, placeX };
+    // bug where it returns undefined
+    const winThreeInARowX = () => {
+        Object.values(board).forEach((value) => {
+            if (value.every(threeXInARow)) {
+                console.log(value);    
+            }
+        });
+    }
+
+    const winVerticalThreeInARow = () => {
+        for (let i = 0; i < board.y1.length; i++) {
+            if (board.y1[i] === board.y2[i] && board.y2[i] === board.y3[i]) {
+                console.log('win');
+            } else {
+                console.log('no')
+            }
+        }
+    }
+    
+    return { displayGameBoard, placeX, placeO, winThreeInARowX, winVerticalThreeInARow };
 })();
 
-console.log(gameBoard.displayGameBoard());
-console.log(gameBoard.placeX());
+// console.log(gameBoard.placeX(2,1));
+// console.log(gameBoard.winThreeInARowX())
+console.log(gameBoard.winVerticalThreeInARow())
