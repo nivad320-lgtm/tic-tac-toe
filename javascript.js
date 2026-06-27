@@ -55,9 +55,7 @@ const gameBoard = (() => {
              (board.y1[i]==='O' && board.y2[i] === 'O' && board.y3[i] === 'O')
             ) {
                 return true;
-            } else {
-                return false;
-            }
+            } 
         }
     }
 
@@ -65,9 +63,7 @@ const gameBoard = (() => {
         if ((board.y2[1] === 'X' && board.y1[0] === 'X' && board.y3[2] === 'X') ||
          (board.y2[1] === 'O' && board.y1[0] === 'O' && board.y3[2] === 'O')) {
             return true;
-        } else {
-            return false;
-        }
+        } 
     }
     
     return { displayGameBoard, boardCheck, placeX, placeO, winThreeInARowX, winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow };
@@ -102,11 +98,12 @@ const ticTacToe = (() => {
             } else if (turn === 'away') {
                 gameBoard.placeO(inputX, inputY)
             }
-
+            
             if (gameBoard.winVerticalThreeInARow() || gameBoard.winDiagonalThreeInARow() || gameBoard.winThreeInARowX() || gameBoard.winThreeInARowO()) {
                 console.log(`Game Over! ${turn.toUpperCase()} win!`);
                 win++;
             };
+
             
             console.log(gameBoard.displayGameBoard());
             if (turn === 'home') {
@@ -121,3 +118,4 @@ const ticTacToe = (() => {
 })();
 
 console.log(ticTacToe.playGame())
+// console.log(gameBoard.winVerticalThreeInARow())
