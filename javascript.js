@@ -68,6 +68,7 @@ const gameBoard = (() => {
         } 
     }
 
+    // There must be a better way to do this because because right now we are going through every elements in Array.
     const tie = () => {
         let tieCount = 0;
         for(let i = 0; i < Object.values(board).length; i++){
@@ -120,7 +121,6 @@ const ticTacToe = (() => {
             if (gameBoard.winVerticalThreeInARow() || gameBoard.winDiagonalThreeInARow() || gameBoard.winThreeInARowX() || gameBoard.winThreeInARowO()) {
                 console.log(`Game Over! ${turn.toUpperCase()} win!`);
                 console.log(gameBoard.displayGameBoard());
-
                 win++;
                 break
             };
@@ -144,5 +144,29 @@ const ticTacToe = (() => {
     return { playGame }
 })();
 
-console.log(ticTacToe.playGame())
+/* 
+TODO
+Every Box in the grid should show the array element
+Maybe you can turn the array into string?
+DO NOT jump into the coding without understanding Algorithm.
+*/
+
+const displayController = (() => {
+    const createCanvas =() => {
+        let container = document.createElement('div');
+        container.setAttribute("class", "container");
+        document.body.appendChild(container);
+        for (let i = 0; i < 9; i ++) {
+            let box = document.createElement('div');
+            box.setAttribute("class", "gridBox");
+            container.appendChild(box);
+        }
+            }
+
+    return { createCanvas }
+
+})();
+
+// console.log(ticTacToe.playGame())
 // console.log(gameBoard.winVerticalThreeInARow())
+displayController.createCanvas()

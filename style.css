@@ -1,0 +1,16 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    display: grid;
+    width: 600px;
+    height: 600px;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.gridBox {
+    outline:1px solid black;
+    outline-offset: -1.5px;
+
+}
