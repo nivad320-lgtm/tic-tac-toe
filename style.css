@@ -14,3 +14,14 @@
     outline-offset: -1.5px;
 
 }
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+dialog {
+    align-self: center;
+    justify-self: center;
+}

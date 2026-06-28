@@ -1,8 +1,8 @@
 /* 
 To Do:
 - [x] add a display element that shows the results upon game end
-- [] interface to allow players to put in their names
-- [] include a button to start/restart the game
+- [x] interface to allow players to put in their names
+- [x] include a button to start/restart the game
 - [x] BugFix Displaying You Win and Tie together 
 */
 
@@ -202,14 +202,32 @@ const ticTacToe = (() => {
     return { playGame, showWinner, resetWinner }
 })();
 
+function createPlayer(name) {
+    return { name }
+}
+
 const displayController = (() => {
     
     // probably not needed anymore, used it for prototyping
     let currentValue;
     let clicked = false;
-    
+    let player1Name;
+    let player2Name;
     const createCanvas = () => {
-        const dialog = document.querySelector('#dialog')
+        const startDialog = document.querySelector('#startDialog');
+        const startButton = document.createElement('button');
+        startButton.textContent = 'Start';
+        startButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            startDialog.close(player1.value);
+            startDialog.close(player2.value);
+            player1Name = createPlayer(player1.value);
+            player2Name = createPlayer(player2.value);
+        })
+        startDialog.appendChild(startButton);
+        startDialog.showModal();
+
+        const dialog = document.querySelector('#dialog');
         let container = document.createElement('div');
         container.setAttribute("class", "container");
         document.body.appendChild(container);
@@ -243,7 +261,11 @@ const displayController = (() => {
                 ticTacToe.playGame();
                 item.textContent = gameBoard.boardToArray()[index];
                 if (ticTacToe.showWinner()) {
-                    winnerText.textContent = `${ticTacToe.showWinner().toUpperCase()} Win!`
+                    if (ticTacToe.showWinner() === 'home') {
+                        winnerText.textContent = `${player1Name.name} Win!`
+                    } else if (ticTacToe.showWinner() === 'away') {
+                        winnerText.textContent = `${player2Name.name} Win!`
+                    }
                     dialog.showModal();
                     ticTacToe.resetWinner();
                     item.textContent = gameBoard.boardToArray()[index];
