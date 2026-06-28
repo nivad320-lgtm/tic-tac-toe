@@ -6,13 +6,18 @@ To Do:
 - [x] BugFix Displaying You Win and Tie together 
 */
 
-const gameBoard = (() => {
-
+function createBoard() {
     const board = {
         y1 : ['_', '_', '_'],
         y2 : ['_', '_', '_'],
         y3 : ['_', '_', '_'],
     }
+    return board; 
+}
+
+const gameBoard = (() => {
+
+    let board = createBoard();
     
     const displayGameBoard = () => {
             let myBoard = '';
@@ -128,10 +133,15 @@ const gameBoard = (() => {
                 break;            
         }
     }
+
+    // I think what you could've done is turn this whole IIFE to factory function
+    const resetBoard = () => {
+        board = createBoard();
+    }
     
     return { displayGameBoard, boardCheck, placeX, placeO, winThreeInARowX,
          winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow, tie, 
-         boardToArray, listenInput };
+         boardToArray, listenInput, resetBoard };
 })();
 
 
@@ -140,10 +150,6 @@ const ticTacToe = (() => {
     let win;
     const playGame = () => {
         
-        const newGameBoard = gameBoard()
-        console.log(newGameBoard.displayGameBoard())
-        console.log('________') 
-
         console.log(gameBoard.displayGameBoard())
         
             if (turn === 'home') {
@@ -189,11 +195,16 @@ const ticTacToe = (() => {
         return win
     }
 
-    return { playGame, showWinner }
+    const resetWinner = () => {
+        win = undefined;
+    }
+
+    return { playGame, showWinner, resetWinner }
 })();
 
 const displayController = (() => {
     
+    // probably not needed anymore, used it for prototyping
     let currentValue;
     let clicked = false;
     
@@ -208,6 +219,14 @@ const displayController = (() => {
 
         const replayButton = document.createElement('button');
         replayButton.textContent = 'Replay';
+        replayButton.addEventListener("click", (event) => {
+            dialog.close();
+            gameBoard.resetBoard();
+            [...gridBoxes].forEach((item, index) => {
+            item.textContent = gameBoard.boardToArray()[index];
+                })
+            }
+        );
         dialog.appendChild(replayButton);
 
         for (let i = 0; i < 9; i ++) {
@@ -226,15 +245,19 @@ const displayController = (() => {
                 if (ticTacToe.showWinner()) {
                     winnerText.textContent = `${ticTacToe.showWinner().toUpperCase()} Win!`
                     dialog.showModal();
+                    ticTacToe.resetWinner();
+                    item.textContent = gameBoard.boardToArray()[index];
                 }
             });
         });
     }
 
+    // probably not needed anymore, used it for prototyping
     const printValue = () => {
         return currentValue;
     }
 
+    // probably not needed anymore
     const didTheyClick = () => {
         return clicked;
     }
