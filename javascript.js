@@ -15,18 +15,18 @@ const gameBoard = (() => {
     };
 
     const boardCheck = (x,y) => {
-        if (Object.values(board)[y-1][x-1] === '_') {
+        if (Object.values(board)[y][x] === '_') {
             return true;
         } else {return false;}
     }
 
     const placeX = (x,y) => {
-        Object.values(board)[y-1][x-1] = 'X';
+        Object.values(board)[y][x] = 'X';
         return displayGameBoard();
     };
 
     const placeO = (x,y) => {
-        Object.values(board)[y-1][x-1] = 'O';
+        Object.values(board)[y][x] = 'O';
         return displayGameBoard();
     };
         
@@ -83,8 +83,47 @@ const gameBoard = (() => {
             return true;
         };
     }
+
+    const boardToArray = () => {
+        const boardArray = Object.values(board).flat(Infinity);
+        return boardArray;
+    }
+
+    const listenInput = (index) => {
+        switch(index) {
+            case 0:
+                return [0, 0]
+                break;
+            case 1:
+                return [1, 0]
+                break;
+            case 2:
+                return [2, 0]
+                break;
+            case 3:
+                return [0, 1]
+                break;
+            case 4:
+                return [1, 1]
+                break;
+            case 5:
+                return [2, 1]
+                break;
+            case 6:
+                return [0, 2]
+                break;
+            case 7:
+                return [1, 2]
+                break;
+            case 8:
+                return [2, 2]
+                break;            
+        }
+    }
     
-    return { displayGameBoard, boardCheck, placeX, placeO, winThreeInARowX, winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow, tie };
+    return { displayGameBoard, boardCheck, placeX, placeO, winThreeInARowX,
+         winThreeInARowO, winVerticalThreeInARow, winDiagonalThreeInARow, tie, 
+         boardToArray, listenInput };
 })();
 
 
@@ -95,7 +134,6 @@ const ticTacToe = (() => {
         
         console.log(gameBoard.displayGameBoard())
         
-        while (!win) {
             if (turn === 'home') {
                 console.log(`Home Team's Turn!`);
             } else if (turn === 'away') {
@@ -103,14 +141,21 @@ const ticTacToe = (() => {
             }
             
             
-            let inputX = prompt("X");
-            let inputY = prompt("Y");
-            
-            while (!gameBoard.boardCheck(inputX,inputY)) {
-                console.log("Same Place!")
-                inputX = prompt("X");
-                inputY = prompt("Y");
+            let inputX = displayController.printValue()[0]
+            let inputY = displayController.printValue()[1]
+
+            console.log(`X: ${inputX}`)
+            console.log(`Y: ${inputY}`)
+
+            if (!gameBoard.boardCheck(inputX,inputY)) {
+                console.log("Same Place!");
+                return 
             }
+            // while (!gameBoard.boardCheck(inputX,inputY)) {
+            //     console.log("Same Place!")
+            //     inputX = prompt("X");
+            //     inputY = prompt("Y");
+            // }
                         
             if (turn === 'home') {
                 gameBoard.placeX(inputX, inputY);
@@ -122,13 +167,11 @@ const ticTacToe = (() => {
                 console.log(`Game Over! ${turn.toUpperCase()} win!`);
                 console.log(gameBoard.displayGameBoard());
                 win++;
-                break
             };
 
             if(gameBoard.tie()) {
                 console.log(`Draw!`);
                 console.log(gameBoard.displayGameBoard());
-                break;
             }
 
             
@@ -138,7 +181,6 @@ const ticTacToe = (() => {
             } else if (turn === 'away') {
                 turn = 'home'
             }
-        }
     }
 
     return { playGame }
@@ -152,7 +194,11 @@ DO NOT jump into the coding without understanding Algorithm.
 */
 
 const displayController = (() => {
-    const createCanvas =() => {
+    
+    let currentValue;
+    let clicked = false;
+    
+    const createCanvas = () => {
         let container = document.createElement('div');
         container.setAttribute("class", "container");
         document.body.appendChild(container);
@@ -161,12 +207,30 @@ const displayController = (() => {
             box.setAttribute("class", "gridBox");
             container.appendChild(box);
         }
-            }
 
-    return { createCanvas }
+        const gridBoxes = document.querySelectorAll('.gridBox');
+        [...gridBoxes].forEach((item, index) => {
+            item.textContent = gameBoard.boardToArray()[index];
+            item.addEventListener("click", () => {
+                currentValue = gameBoard.listenInput(index);
+                ticTacToe.playGame();
+                item.textContent = gameBoard.boardToArray()[index];
+            });
+        });
+    }
+
+    const printValue = () => {
+        return currentValue;
+    }
+
+    const didTheyClick = () => {
+        return clicked;
+    }
+
+    return { createCanvas, printValue, didTheyClick }
 
 })();
 
-// console.log(ticTacToe.playGame())
+// ticTacToe.playGame()
 // console.log(gameBoard.winVerticalThreeInARow())
 displayController.createCanvas()
