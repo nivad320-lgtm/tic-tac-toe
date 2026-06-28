@@ -183,6 +183,7 @@ const ticTacToe = (() => {
             } else if(gameBoard.tie()) {
                 console.log(`Draw!`);
                 console.log(gameBoard.displayGameBoard());
+                win = 'draw';
             } else {console.log(gameBoard.displayGameBoard());
             if (turn === 'home') {
                 turn = 'away'
@@ -262,9 +263,11 @@ const displayController = (() => {
                 item.textContent = gameBoard.boardToArray()[index];
                 if (ticTacToe.showWinner()) {
                     if (ticTacToe.showWinner() === 'home') {
-                        winnerText.textContent = `${player1Name.name} Win!`
+                        winnerText.textContent = `${player1Name.name} Win!`;
                     } else if (ticTacToe.showWinner() === 'away') {
-                        winnerText.textContent = `${player2Name.name} Win!`
+                        winnerText.textContent = `${player2Name.name} Win!`;
+                    } else if (ticTacToe.showWinner() === 'draw') {
+                        winnerText.textContent = `Draw!`;
                     }
                     dialog.showModal();
                     ticTacToe.resetWinner();
