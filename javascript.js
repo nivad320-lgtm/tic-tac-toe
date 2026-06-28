@@ -1,3 +1,11 @@
+/* 
+To Do:
+- [x] add a display element that shows the results upon game end
+- [] interface to allow players to put in their names
+- [] include a button to start/restart the game
+- [x] BugFix Displaying You Win and Tie together 
+*/
+
 const gameBoard = (() => {
 
     const board = {
@@ -129,9 +137,13 @@ const gameBoard = (() => {
 
 const ticTacToe = (() => {
     let turn = 'home';
-    let win = 0
+    let win;
     const playGame = () => {
         
+        const newGameBoard = gameBoard()
+        console.log(newGameBoard.displayGameBoard())
+        console.log('________') 
+
         console.log(gameBoard.displayGameBoard())
         
             if (turn === 'home') {
@@ -151,11 +163,6 @@ const ticTacToe = (() => {
                 console.log("Same Place!");
                 return 
             }
-            // while (!gameBoard.boardCheck(inputX,inputY)) {
-            //     console.log("Same Place!")
-            //     inputX = prompt("X");
-            //     inputY = prompt("Y");
-            // }
                         
             if (turn === 'home') {
                 gameBoard.placeX(inputX, inputY);
@@ -165,33 +172,25 @@ const ticTacToe = (() => {
             
             if (gameBoard.winVerticalThreeInARow() || gameBoard.winDiagonalThreeInARow() || gameBoard.winThreeInARowX() || gameBoard.winThreeInARowO()) {
                 console.log(`Game Over! ${turn.toUpperCase()} win!`);
-                console.log(gameBoard.displayGameBoard());
-                win++;
-            };
-
-            if(gameBoard.tie()) {
+                console.log(gameBoard.displayGameBoard());                
+                win = turn;
+            } else if(gameBoard.tie()) {
                 console.log(`Draw!`);
                 console.log(gameBoard.displayGameBoard());
-            }
-
-            
-            console.log(gameBoard.displayGameBoard());
+            } else {console.log(gameBoard.displayGameBoard());
             if (turn === 'home') {
                 turn = 'away'
             } else if (turn === 'away') {
                 turn = 'home'
-            }
+            }}
     }
 
-    return { playGame }
-})();
+    const showWinner = () => {
+        return win
+    }
 
-/* 
-TODO
-Every Box in the grid should show the array element
-Maybe you can turn the array into string?
-DO NOT jump into the coding without understanding Algorithm.
-*/
+    return { playGame, showWinner }
+})();
 
 const displayController = (() => {
     
@@ -199,9 +198,18 @@ const displayController = (() => {
     let clicked = false;
     
     const createCanvas = () => {
+        const dialog = document.querySelector('#dialog')
         let container = document.createElement('div');
         container.setAttribute("class", "container");
         document.body.appendChild(container);
+
+        const winnerText = document.createElement('p');
+        dialog.appendChild(winnerText);
+
+        const replayButton = document.createElement('button');
+        replayButton.textContent = 'Replay';
+        dialog.appendChild(replayButton);
+
         for (let i = 0; i < 9; i ++) {
             let box = document.createElement('div');
             box.setAttribute("class", "gridBox");
@@ -215,6 +223,10 @@ const displayController = (() => {
                 currentValue = gameBoard.listenInput(index);
                 ticTacToe.playGame();
                 item.textContent = gameBoard.boardToArray()[index];
+                if (ticTacToe.showWinner()) {
+                    winnerText.textContent = `${ticTacToe.showWinner().toUpperCase()} Win!`
+                    dialog.showModal();
+                }
             });
         });
     }
